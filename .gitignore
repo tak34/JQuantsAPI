@@ -162,3 +162,5 @@ cython_debug/
 # 自分で追加
 *.csv
 keys/
+data/
+jquantsapi/kakunin.ipynb
