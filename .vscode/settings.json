@@ -1,0 +1,33 @@
+{
+    //-------------------------------------------------------------------
+    // pythonの設定
+    //-------------------------------------------------------------------
+    // pylintを有効化する
+    "python.linting.pylintEnabled": true,
+    // black formatterの設定をする
+    "python.formatting.provider": "black",
+    // "python.formatting.provider": "none",
+    // エディタでblack formatterを指定、保存時にformatterを自動で呼び出す
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+    //    "editor.defaultFormatter": "ms-python.autopep8",
+        "editor.formatOnSave": true,
+    },
+    //-------------------------------------------------------------------
+    // shellの設定をする
+    //-------------------------------------------------------------------
+    // 保存時にshelformatを自動適用する
+    "[shellscript]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format",
+        "editor.formatOnSave": true
+    },
+    // shellcheckは設定不要のため記述なし
+    //-------------------------------------------------------------------
+    // jsonの設定をする
+    //-------------------------------------------------------------------
+    // json保存時にvs codeのフォーマッターを自動適用する
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.formatOnSave": true
+    }
+}

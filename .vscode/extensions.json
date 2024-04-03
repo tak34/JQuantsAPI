@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "ms-python.pylint",
+        "ms-python.black-formatter",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "timonwong.shellcheck",
+        "foxundermoon.shell-format",
+    ]
+}
