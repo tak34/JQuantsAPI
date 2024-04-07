@@ -31,6 +31,8 @@ save_date = dt.datetime.now().strftime("%Y%m%d")
 df_id = pd.read_csv(PATH_ID, index_col=0)
 address = df_id.at["address", "value"]
 passcode = df_id.at["pass", "value"]
+discord_url = df_id.at["discord_url", "value"]
+line_token = df_id.at["line_token", "value"]
 jqapi = JQuantsAPI(address=address, passcode=passcode)
 
 ###########################
@@ -76,6 +78,11 @@ if start_dt <= end_dt:
             print(
                 f"(df_list: {start_dt.strftime('%Y%m%d')} to {end_dt.strftime('%Y%m%d')})"
             )
+            utils.discord_notify(
+                f"Failed to update list data. (df_list: {start_dt.strftime('%Y%m%d')} to {end_dt.strftime('%Y%m%d')})",
+                discord_url,
+                line_token,
+            )
 
     else:
         # 全期間のデータを取得する
@@ -86,6 +93,11 @@ else:
     # 既に最新のデータがあるか、日付の設定がおかしいのでデータは取ってこない
     print("It's already the latest data or start_dt is not appropriate.")
     print(f"(df_list: {start_dt.strftime('%Y%m%d')} to {end_dt.strftime('%Y%m%d')})")
+    utils.discord_notify(
+        f"Failed to update list data. (df_list: {start_dt.strftime('%Y%m%d')} to {end_dt.strftime('%Y%m%d')})",
+        discord_url,
+        line_token,
+    )
 
 ###########################
 # 株価データの更新（df_price）

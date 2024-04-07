@@ -1,4 +1,5 @@
 import numpy as np
+import requests
 
 
 def reduce_mem_usage(df):
@@ -46,3 +47,23 @@ def reduce_mem_usage(df):
     print("Decreased by {:.1f}%".format(100 * (start_mem - end_mem) / start_mem))
 
     return df
+
+
+def line_notify(message, token):
+    # https://qiita.com/pontyo4/items/10aa0ba0a17aee19e88e
+    url = "https://notify-api.line.me/api/notify"
+    headers = {"Authorization": "Bearer " + token}
+    payload = {"message": message}
+    _ = requests.post(url, headers=headers, params=payload)
+
+
+def discord_notify(message, discord_url, line_token):
+    data = {"content": message}
+    try:
+        # メッセージの送信
+        response_body = requests.post(discord_url, data=data)
+        response_body.raise_for_status()
+
+    except Exception as e:
+        # Discordに問題があった場合、ラインへ送信
+        line_notify(e, line_token)
