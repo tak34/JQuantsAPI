@@ -94,11 +94,14 @@ def query(
 
         where += [f"symbol in ({predicated})"]
 
+    # 全行抽出できるように追加
+    field_all = f"{field},symbol,dt"
+    if field == "*":
+        field_all = "*"
+
     stmt = f"""
 SELECT 
-    {field}, 
-    symbol, 
-    dt
+    {field_all}
 FROM
     {table_name}
         """
@@ -107,14 +110,19 @@ FROM
         condition = " AND ".join(where)
         stmt += f"WHERE {condition}"
 
+    athena_cache_settings = {
+        "max_cache_expires": max_cache_expires,
+    }
+
     df = awswrangler.athena.read_sql_query(
         stmt,
         database=glue_db_name,
         boto3_session=boto3_session,
-        max_cache_seconds=max_cache_expires,
+        athena_cache_settings=athena_cache_settings,
         ctas_approach=ctas_approach,
     )
 
     df["dt"] = pd.to_datetime(df["dt"])
 
-    return df.set_index(["dt", "symbol"])[field].unstack().sort_index()
+    # return df.set_index(["dt", "symbol"])[field].unstack().sort_index()
+    return df.sort_values(by="dt").reset_index(drop=True)

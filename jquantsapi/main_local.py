@@ -35,6 +35,7 @@ discord_url = df_id.at["discord_url", "value"]
 line_token = df_id.at["line_token", "value"]
 jqapi = JQuantsAPI(address=address, passcode=passcode)
 
+
 ###########################
 # 銘柄情報の更新（df_list）
 ###########################
