@@ -165,4 +165,3 @@ keys/
 data/
 jquantsapi/kakunin.ipynb
 colab_data/
-jquantsapi/send_data_to_s3.ipynb
