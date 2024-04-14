@@ -73,7 +73,7 @@ def fetch_latest_data(table_name, start_dt, end_dt):
         raise ValueError(f"Invalid table_name: {table_name}")
 
     # 取得したデータが空ならNoneを返す
-    if df_latest is None:
+    if df_latest is None or df_latest.empty:
         return None
 
     if table_name == "price":
