@@ -1154,3 +1154,36 @@ class JQuantsAPI:
                 return None
             return df_return
         return pd.concat(buff).reset_index(drop=True)
+
+    def get_trading_calendar(
+        self,
+        holiday_division: int = 1,
+        start_dt: datetime = datetime(2024, 4, 1, tzinfo=tz.gettz("Asia/Tokyo")),
+        end_dt: datetime = datetime.now(tz.gettz("Asia/Tokyo")),
+    ) -> pd.DataFrame:
+        """
+        東証の営業日等の情報を取得
+
+        Args:
+            holiday_division: 休日区分（0: 被営業日, 1: 営業日, 2: 東証半日立会日, 3: 非営業日(祝日取引あり)）
+            start_dt: 取得開始日
+            end_dt: 取得終了日
+
+        Returns:
+            pd.DataFrame: 東証の営業日等の情報
+        """
+        url = f"{self.JQUANTS_API_BASE}/markets/trading_calendar"
+        params = {}
+        params["holiday_division"] = holiday_division
+        params["from"] = start_dt.strftime("%Y%m%d")
+        params["to"] = end_dt.strftime("%Y%m%d")
+        ret = self._get(url, params)
+        data = ret.json()["trading_calendar"]
+
+        df = pd.DataFrame.from_dict(data)
+        cols = ["Date", "HolidayDivision"]
+        if len(df) == 0:
+            return pd.DataFrame([], columns=cols)
+        df.loc[:, "Date"] = pd.to_datetime(df["Date"], format="%Y-%m-%d")
+        df = df.sort_values("Date").reset_index(drop=True)
+        return df[cols]
