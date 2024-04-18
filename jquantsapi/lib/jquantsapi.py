@@ -353,7 +353,11 @@ class JQuantsAPI:
             if len(df_return) == 0:
                 return None
             return df_return
-        return pd.concat(buff).reset_index(drop=True)
+        
+        df_return = pd.concat(buff)
+        df_return.loc[:, "Date"] = pd.to_datetime(df_return["Date"], format="%Y-%m-%d")
+        df_return = df_return.sort_values("Date").reset_index(drop=True)
+        return df_return
 
     def get_fins_statements(
         self, code: str = "", date_yyyymmdd: str = ""

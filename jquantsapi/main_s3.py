@@ -80,6 +80,10 @@ def fetch_latest_data(table_name, start_dt, end_dt):
         # AdjustmentFactorが1ではない銘柄を抽出し、ログに残す
         check_adjustment_factor(df_latest)
 
+    # なんかdtアクセサリのエラーが出るので追加。lambdaでのpandasのバージョンの問題っぽい
+    df_latest.loc[:, "date"] = pd.to_datetime(df_latest["Date"], format="%Y-%m-%d")
+    df_latest.drop(columns=["Date"], axis=1, inplace=True)
+
     # J-QuantsのデータをS3に入れる用に前処理する
     # 列名をすべて小文字にする
     df_latest.columns = df_latest.columns.str.lower()
