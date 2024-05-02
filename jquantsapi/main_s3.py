@@ -104,7 +104,9 @@ def update_jquants_api(table_name):
     （既存データの更新のみ。期間を指定した新規データの取得は行えない）
     """
     dt_now = dt.datetime.now()
-    start_dt_s3 = pd.Timestamp(year=dt_now.year, month=dt_now.month, day=1)
+    start_dt_s3 = pd.Timestamp(
+        year=dt_now.year, month=dt_now.month, day=1
+    ) - pd.DateOffset(months=1)
 
     # 既存のデータを更新する
     # その月のデータを取得する。無ければ空のテーブルが返ってくる
