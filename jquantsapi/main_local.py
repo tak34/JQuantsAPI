@@ -16,23 +16,23 @@ import requests
 from dateutil import tz
 from lib import utils
 from lib.jquantsapi import JQuantsAPI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # JQuantsAPI利用するときに使うIDを記載したもの
 PATH_ID = "keys/id.csv"
 # 全期間のデータ使う場合はTrue（Falseは更新）
-FETCH_ALL_DATA = False
+FETCH_ALL_DATA = True
 # 取得したデータの保存場所
 RAW = "data"
 
 # ファイル名に記入する日付
 save_date = dt.datetime.now().strftime("%Y%m%d")
 
-
-df_id = pd.read_csv(PATH_ID, index_col=0)
-address = df_id.at["address", "value"]
-passcode = df_id.at["pass", "value"]
-discord_url = df_id.at["discord_url", "value"]
-line_token = df_id.at["line_token", "value"]
+discord_url = os.getenv("DISCORD_URL")
+address = os.getenv("ADDRESS")
+passcode = os.getenv("JQUANTS_PASS")
 jqapi = JQuantsAPI(address=address, passcode=passcode)
 
 
@@ -51,7 +51,7 @@ if not FETCH_ALL_DATA:
         days=1
     )
 else:
-    start_dt = pd.Timestamp(year=2024, month=1, day=1, tz="Asia/Tokyo")
+    start_dt = pd.Timestamp(year=2025, month=12, day=1, tz="Asia/Tokyo")
 
 end_dt = pd.Timestamp.now(tz="Asia/Tokyo")
 
@@ -82,7 +82,6 @@ if start_dt <= end_dt:
             utils.discord_notify(
                 f"Failed to update list data. (df_list: {start_dt.strftime('%Y%m%d')} to {end_dt.strftime('%Y%m%d')})",
                 discord_url,
-                line_token,
             )
 
     else:
@@ -97,7 +96,6 @@ else:
     utils.discord_notify(
         f"Failed to update list data. (df_list: {start_dt.strftime('%Y%m%d')} to {end_dt.strftime('%Y%m%d')})",
         discord_url,
-        line_token,
     )
 
 ###########################
@@ -113,7 +111,7 @@ if not FETCH_ALL_DATA:
         days=1
     )
 else:
-    start_dt = pd.Timestamp(year=2024, month=1, day=1, tz="Asia/Tokyo")
+    start_dt = pd.Timestamp(year=2025, month=12, day=1, tz="Asia/Tokyo")
 
 end_dt = pd.Timestamp.now(tz="Asia/Tokyo")
 if end_dt.hour < 19:
@@ -168,7 +166,7 @@ if not FETCH_ALL_DATA:
         days=1
     )
 else:
-    start_dt = pd.Timestamp(year=2024, month=1, day=1, tz="Asia/Tokyo")
+    start_dt = pd.Timestamp(year=2025, month=12, day=1, tz="Asia/Tokyo")
 
 end_dt = pd.Timestamp.now(tz="Asia/Tokyo")
 if end_dt.hour < 19:

@@ -57,7 +57,7 @@ def line_notify(message, token):
     _ = requests.post(url, headers=headers, params=payload)
 
 
-def discord_notify(message, discord_url, line_token):
+def discord_notify(message, discord_url):
     data = {"content": message}
     try:
         # メッセージの送信
@@ -66,4 +66,4 @@ def discord_notify(message, discord_url, line_token):
 
     except Exception as e:
         # Discordに問題があった場合、ラインへ送信
-        line_notify(e, line_token)
+        pass
